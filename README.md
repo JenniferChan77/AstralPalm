@@ -122,3 +122,18 @@ Loading screens use emotional anticipation messaging (e.g., *"Analyzing your lif
 - Achieve strong conversion through value-driven paywall design
 - Encourage completion of both hand scans
 - Create repeat engagement via history and re-scan features
+
+---
+
+## Development Progress
+
+### Completed Screens
+
+#### Loading Screen (`app/index.tsx`) — Done
+
+#### Splash Screen (`app.json`) — Configured
+- `expo-splash-screen` plugin configured with dark background `#0A0010`
+- Takes effect on native build (`npx expo run:ios`), not visible in Expo Go
+
+### In Progress / Next
+- Intro screen (`app/intro.tsx`)
