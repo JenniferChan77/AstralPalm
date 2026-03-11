@@ -1,3 +1,4 @@
+import { Asset } from "expo-asset";
 import { router } from "expo-router";
 import { useVideoPlayer, VideoView } from "expo-video";
 import { useEffect, useRef } from "react";
@@ -14,6 +15,9 @@ export default function LoadingScreen() {
   );
 
   useEffect(() => {
+    // Load background image of intro page in advance
+    Asset.loadAsync(require("../assets/images/introBg.png"));
+
     const subscription = player.addListener("playToEnd", () => {
       if (!hasNavigated.current) {
         hasNavigated.current = true;
@@ -46,7 +50,7 @@ export default function LoadingScreen() {
       />
       <View className="absolute inset-0 items-center pt-[170px]" pointerEvents="none">
         <Text
-          className="text-[#D4B483] text-lg italic font-light tracking-[0.8px] text-center px-10"
+          className="text-[#D4B483] text-lg italic tracking-[0.8px] text-center px-10"
           style={{
             textShadowColor: "rgba(0, 0, 0, 0.8)",
             textShadowOffset: { width: 0, height: 1 },
