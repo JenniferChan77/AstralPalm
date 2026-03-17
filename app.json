@@ -40,7 +40,13 @@
           }
         }
       ],
-      "expo-video"
+      "expo-video",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow AstralPalm to access your photos to upload your palm."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,
