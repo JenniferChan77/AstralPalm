@@ -2,7 +2,8 @@ import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Alert, Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { uploadPalms } from "../../lib/palmApi";
 
 const GUIDELINES = [
   "Entire palm visible (including fingers)",
@@ -16,6 +17,20 @@ export default function PhotoUploadScreen() {
   const router = useRouter();
   const [leftPhoto, setLeftPhoto] = useState<string | null>(null);
   const [rightPhoto, setRightPhoto] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleUpload = async () => {
+    if (!leftPhoto || !rightPhoto) return;
+    setIsUploading(true);
+    try {
+      await uploadPalms(leftPhoto, rightPhoto);
+      // TODO: navigate to analysis screen
+    } catch (error: any) {
+      Alert.alert("Upload Failed", error.message ?? "Something went wrong. Please try again.");
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
   const pickImage = async (hand: "left" | "right") => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -102,16 +117,29 @@ export default function PhotoUploadScreen() {
             ))}
           </View>
 
+          {/* Hint */}
+          {(leftPhoto || rightPhoto) && (!leftPhoto || !rightPhoto) && (
+            <Text className="text-center text-white/50 text-sm mb-2 px-5">
+              Please upload both palms to continue
+            </Text>
+          )}
+
           {/* Upload Button */}
-          <View className="px-5 mt-8">
+          <View className="px-5 mt-6">
             <TouchableOpacity
               className="bg-[#D4B483] rounded-full py-4 items-center"
               activeOpacity={0.8}
-              disabled
+              disabled={!leftPhoto || !rightPhoto || isUploading}
+              onPress={handleUpload}
+              style={{ opacity: !leftPhoto || !rightPhoto || isUploading ? 0.5 : 1 }}
             >
-              <Text className="text-[#0A0010] font-bold text-lg tracking-wide">
-                Upload
-              </Text>
+              {isUploading ? (
+                <ActivityIndicator color="#0A0010" />
+              ) : (
+                <Text className="text-[#0A0010] font-bold text-lg tracking-wide">
+                  Upload
+                </Text>
+              )}
             </TouchableOpacity>
           </View>
       </ScrollView>
